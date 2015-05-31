@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Add Biodata</title>
+	</head>
+	<body>
+		<a href="biodata.php">Kembali</a>
+		<h1>Add Biodata</h1>
+		<hr/>
+		<form method="post" action="biodata.php?act=create">
+			<table>
+				<tr>
+					<td>Nama</td>
+					<td>:</td>
+					<td><input type="text" name="f_nama"/></td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>:</td>
+					<td><input type="text" name="f_email"/></td>
+				</tr>
+				<tr>
+					<td>No Telp</td>
+					<td>:</td>
+					<td><input type="text" name="f_telp"/></td>
+				</tr>
+				<tr>
+					<td>Alamat</td>
+					<td>:</td>
+					<td><textarea name="f_alamat"></textarea></td>
+				</tr>
+				<tr>
+					<td>Jenis Kelamin</td>
+					<td>:</td>
+					<td>
+						<label>
+							<input type="radio" name="f_jk" value="l" />
+							Laki - Laki
+						</label>
+						<label>
+							<input type="radio" name="f_jk" value="p" />
+							Perempuan
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td>Agama</td>
+					<td>:</td>
+					<td>
+						<select name="f_agama">
+							<option value="">--Pilih Salah Satu--</option>
+							<option value="contoh1">Contoh 1</option>
+							<option value="contoh2">Contoh 2</option>
+							<option value="contoh3">Contoh 3</option>
+							<option value="contoh4">Contoh 4</option>
+							<option value="contoh5">Contoh 5</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Hobi</td>
+					<td>:</td>
+					<td>
+						<label>
+							<input type="checkbox" name="f_hobi[]" value="membaca" />
+							Membaca
+							<input type="checkbox" name="f_hobi[]" value="menulis" />
+							Menulis
+							<input type="checkbox" name="f_hobi[]" value="main game" />
+							Main Game
+							<input type="checkbox" name="f_hobi[]" value="renang" />
+							Renang
+							<input type="checkbox" name="f_hobi[]" value="basket" />
+							Basket
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td>Foto</td>
+					<td>:</td>
+					<td><input type="file" name="f_foto" /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td><input type="submit" value="Submit" name="f_submit" /></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>
