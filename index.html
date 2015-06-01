@@ -589,8 +589,9 @@ $SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,a
 							<li>Tampilkan perintah query dengan fungsi echo untuk memastikan apakah perintah sudah benar atau belum</li>
 							<li>Perbaruhi halaman project atau refresh halaman</li>
 							<li>Buka tab baru kemudian jalankan phpmyadmin http://localhost/phpmyadmin, pilih database yang telah dibuat</li>
-							<li>Copykan hasil echo perintah query pada panel sql yang ada pada phpmyadmin</li>
+							<li>Copykan hasil echo perintah query pada panel sql yang ada pada , untuk encoba fungsi dari query yang telah dibuat</li>
 							<li><img src="imgs/phpmyadmin-sql.gif" class="img-thumbnail" /></li>
+							<li>Jika perintah query benar maka tidak perlu lagi untuk menampilkan query dengan echo karena perintah akan secara langsung tereksekusi saat form disubmit.</li>
 							<li>Panggil file koneksi.php agar eksekusi ke database dapat dijalankan
 								<pre>include &quot;koneksi.php&quot;;</pre>
 								<pre>
@@ -642,6 +643,7 @@ $SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,a
 				
 				echo $SQL;
 				
+				header(&quot;location:biodata.php&quot;);
 			}
 			else
 			{
