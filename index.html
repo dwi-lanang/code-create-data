@@ -639,9 +639,9 @@ $SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,a
 				//cek hasil eksekusi dengan perintah echo semua variable
 				//echo $nama .&quot; - &quot;. $email .&quot; - &quot;. $telp .&quot; - &quot;. $alamat .&quot; - &quot;. $jk .&quot; - &quot;. $agama .&quot; - &quot;. $hobinya .&quot; - &quot;. $foto;
 				//buat perintah query
-				$SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,agama,foto) VALUES (&#39;$nama&#39;, &#39;$email&#39;, &#39;$telp&#39;, &#39;$alamat&#39;, &#39;$jk&#39;, &#39;$hobinya&#39;, &#39;$agama&#39;, &#39;$foto&#39;)&quot;; 
+				$QUERY = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,agama,foto) VALUES (&#39;$nama&#39;, &#39;$email&#39;, &#39;$telp&#39;, &#39;$alamat&#39;, &#39;$jk&#39;, &#39;$hobinya&#39;, &#39;$agama&#39;, &#39;$foto&#39;)&quot;; 
 				
-				echo $SQL;
+				mysql_query($QUERY);
 				
 				header(&quot;location:biodata.php&quot;);
 			}
