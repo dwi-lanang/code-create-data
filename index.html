@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Code Fundamental - Code View Data</title>
+    <title>Code Fundamental - Code Create Data</title>
 	<link rel="apple-touch-icon" sizes="57x57" href="//dwilanang.github.io/code-fundamental/imgs/icon/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="//dwilanang.github.io/code-fundamental/imgs/icon/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="//dwilanang.github.io/code-fundamental/imgs/icon/apple-icon-72x72.png">
@@ -27,7 +27,7 @@
 	<meta property="og:title" content="Code Fundamental"/>
 	<meta property="og:image" content="http://dwilanang.github.io/code-fundamental/imgs/logo.png"/>
 	<meta property="og:description" content="Belajar dan berbagi pemrograman web"/>
-	<meta property="og:site_name" content="http://dwilanang.github.io/code-fundamental" />
+	<meta property="og:site_name" content="Toyota Connect" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@dwilanank" />
     <meta name="twitter:creator" content="@dwilanank" />
@@ -99,7 +99,7 @@
 				<div class="panel-heading" role="tab" id="accordion">
 				  <h4 class="panel-title">
 					<a data-toggle="collapse" data-parent="#accordion" href="#step0" aria-expanded="true" aria-controls="Step0">
-						1. Started View
+						1. Create Table
 					</a>
 				  </h4>
 				</div>
@@ -113,165 +113,45 @@
 								<img src="imgs/controll-xampp.jpg" class="img-thumbnail" />
 							</li>
 							<li>
-								Buka halaman biodata
-							</li>
-							<li>
-								Buat file list-biodata.html
+								Import data.sql dan biodata.sql pada phpmyadmin panel import, atau copy peintah berikut kemudian paste pada phpmyadmin panel sql
 								<pre>
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-	&lt;head&gt;
-		&lt;title&gt;List Biodata&lt;/title&gt;
-	&lt;/head&gt;
-	&lt;body&gt;
-		&lt;h1&gt;List Biodata&lt;/h1&gt;
-		&lt;hr/&gt;
-		
-	&lt;/body&gt;
-&lt;/html&gt;gt;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`belajar` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `belajar`;
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+/*Data for the table `users` */
+
+insert  into `users`(`id`,`name`,`username`,`password`) values (1,'admin','admin','admin'),(2,'admin 2','admin2','admin');
+
+CREATE TABLE IF NOT EXISTS `biodata` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(25) NOT NULL,
+  `alamat` varchar(50) NOT NULL,
+  `no_telp` varchar(15) NOT NULL,
+  `jenis_kelamin` enum('l','p') NOT NULL,
+  `email` varchar(15) NOT NULL,
+  `hobi` varchar(100) NOT NULL,
+  `agama` varchar(20) NOT NULL,
+  `foto` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 								</pre>
 							</li>
 							<li>
-								Tampilkan halaman view data saat masuk ke halaman biodata dengan merubah script pemanggilan pada `biodata.php`
-								<pre>			
-&lt;?php 
-	//panggil koneksi
-	include &quot;koneksi.php&quot;;
-	//cek apakah ada action atau tidak
-	if(isset($_GET['act']) AND $_GET['act'])
-	{
-		if($_GET['act'] == &quot;add&quot;)
-		{
-			//create form add
-			include &quot;add-biodata.html&quot;;
-		}
-		elseif($_GET['act'] == &quot;create&quot;)
-		{
-			//echo &quot;action create&quot;;
-			//cek apakah form dapat mengirimkan nilai pada biodata.php
-			//print_r($_POST);
-			//cek apakah nilai dikirimkan dari form atau tidak
-			if(isset($_POST['f_submit']) AND $_POST['f_submit']) //jika ya
-			{
-				//masukan nilai input pada form pada variable agar lebih ringkas
-				$nama = $_POST['f_nama'];
-				$email = $_POST['f_email'];
-				$telp = $_POST['f_telp'];
-				$alamat = $_POST['f_alamat'];
-				$jk = (isset($_POST['f_jk'])?$_POST['f_jk']:null);
-				$agama = $_POST['f_agama'];
-				$hobi = (isset($_POST['f_hobi'])?$_POST['f_hobi']:array());
-				
-				//cara simple
-				$hobi = implode(&quot;,&quot;, $hobi);
-				
-				//----------------------------------------------------
-				//cara dengan melakukan perulangan
-				//karena hobi adalah array jadi harus melakukan perulangan untuk mendapatkan nilai menjadi satu inputan
-				/*$hobinya = &quot;&quot;;
-				if(count($hobi) &gt; 0)
-				{
-					foreach($hobi as $v_hobi)
-					{
-						$hobinya .= $v_hobi .&quot;,&quot;; //menggabungkan nilai hobi menjadi satu baris kemudian dipisahkan anda `,`
-					}
-					$hobinya = substr($hobinya, 0, -1); //menghilangkan tanda `,` pada akhir string karena nilai terakhir berupa kosong
-					//echo $hobinya;
-				}*/
-				//-------------------------------------------------------
-				
-				//upload gambar
-				//cek apakah gambar diinputkan atau tidak
-				//jenis upload pengambilan nilai tidak sama dengan input di atas menggunakan $_POST tapi dengan variable $_FILES
-				if($_FILES['f_foto']['size'] &gt; 0) //cek size gambar untuk mengetahui eventnya
-				{
-					//Array ( [f_foto] =&gt; Array ( [name] =&gt; logo.png [type] =&gt; image/png [tmp_name] =&gt; D:\SOURCE\xampp\tmp\php3574.tmp [error] =&gt; 0 [size] =&gt; 1546 ) )
-					//semua hasil print dari gambar dapat dimanfaatkan untuk mengapload file ke folder yang kita inginkan
-					
-					//print_r($_FILES);
-					
-					$foto = $_FILES['f_foto']['name'];
-					//copy(temporary folder, folder tujuan beserta nama filenya);
-					//mengambil variable yang ada pada variable server `$_SERVER`
-					//print_r($_SERVER);
-					copy($_FILES['f_foto']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] .&quot;/webku/upload/&quot;. $foto); //perintah untuk menduplikat gambar yang ada pada temporary ke folder yang kita inginkan
-				}
-				else //jika tidak ada
-				{
-					//echo &quot;tidak ada gambar yang diinput.&quot;;
-					$foto = null;
-				}
-				//cek apakah nilai inputan telah dapat diambil atau tidak
-				/*
-				echo $nama .&quot;&lt;br/&gt;&quot;;
-				echo $email .&quot;&lt;br/&gt;&quot;;
-				echo $telp .&quot;&lt;br/&gt;&quot;;
-				echo $alamat .&quot;&lt;br/&gt;&quot;;
-				echo $hobinya .&quot;&lt;br/&gt;&quot;;
-				echo $hobi .&quot;&lt;br/&gt;&quot;;
-				echo $agama .&quot;&lt;br/&gt;&quot;;
-				echo $jk .&quot;&lt;br/&gt;&quot;;
-				echo $foto .&quot;&lt;br/&gt;&quot;;
-				*/
-				//semua nilai inputan telah dapat diambil
-				//validasi form agar kosong tidak dapat disimpan
-				if($nama AND $email AND $telp AND $alamat AND $hobi AND $agama AND $jk AND $foto)
-				{
-					//echo &quot;OK&quot;;
-					//buat perintah query untuk menyimpan hasil inputan dari form
-					$QUERY = &quot;INSERT INTO biodata (nama, alamat, no_telp, email, jenis_kelamin, hobi, agama, foto) VALUES ('$nama', '$alamat', '$telp', '$email', '$jk', '$hobi', '$agama', '$foto')&quot;;
-					//cek apakah perintah query telah berjalan dengan benar atau belum
-					//echo $QUERY;
-					//jika pada phpmyadmin telah berhasil, jalan kan untuk eksekusi ke database saat form disubmit
-					//perintah eksekusi query pada mysql
-					mysql_query($QUERY);
-					//panggil koneksi ke database agar perintah dapat dijalankan
-					header(&quot;location:biodata.php&quot;); //arahkan halaman ke halaman view list - pada belajar selanjutnya ..
-				}
-				else
-				{
-					echo &quot;Form harus diisi!&quot;;
-				}
-			}
-			else //jika tidak
-			{
-				header(&quot;location:biodata.php?act=add&quot;); //arahkan halaman ke halaman add
-			}
-		}
-		elseif($_GET['act'] == &quot;edit&quot;)
-		{
-			//tampilkan halaman form edit
-			//jika ingin mengedit data, data yang akan diedit harus sesuai dengan data yang dipilih dengan field kunci yaitu id
-			//select data yang akan diedit, buatkan perintah query untk memilih data yang akan diedit
-			$id = $_GET['id'];
-			if($id)
-			{
-				$QUERY = &quot;SELECT * FROM biodata WHERE id='&quot;. $id .&quot;'&quot;;
-				//cek fungsi query apakah sudah benar atau belum
-				//echo $QUERY;
-				//exit;
-				//ambil hasil dari perintah query kemudian ditampilkan pada masing-masing input pada form
-				$RESULT = mysql_query($QUERY);
-				$ROW = mysql_fetch_assoc($RESULT);
-				
-				//cek apakah data telah dapat ditampilkan
-				//print_r($ROW); //tampilan data yang berupa kumpulan array
-				
-			}
-			
-			include &quot;edit-biodata.html&quot;;
-		}
-	}
-	else
-	{
-		//view list biodata
-		
-		include &quot;list-biodata.html&quot;;
-	}
-?&gt;gt;
-								</pre>
+								<img src="imgs/database.gif" class="img-thumbnail" />
 							</li>
-							
 						</ul>
 				  </div>
 				</div>
@@ -280,7 +160,7 @@
 				<div class="panel-heading" role="tab" id="accordion">
 				  <h4 class="panel-title">
 					<a data-toggle="collapse" data-parent="#accordion" href="#step2" aria-expanded="true" aria-controls="Step2">
-						2. Select and View Data
+						2. Started Code
 					</a>
 				  </h4>
 				</div>
@@ -288,245 +168,500 @@
 				  <div class="panel-body">
 						<ul>
 							<li>
-								Buat perintah query untuk menampilkan semua data pada table `biodata`
+								Download <a href="https://github.com/dwilanang/code-started/archive/master.zip">Code Started</a>, unzip dan letakkan project pada htdocs seperti pada latihan sebelumnya <a hre="http://dwilanang.github.io/code-started/">Code Started</a>
+							</li>
+							<li>
+								Buka browser kemudian ketik pada url http://localhost/webku/index.php
+							</li>
+							<li>
+								Login dengan username : admin dan password : admin, kemudian akan masuk ke halaman home
+							</li>
+							<li>
+								Tambahkan menu `Biodata` pada halaman home.html
 								<pre>
-//buat perintah query untuk menampilkan data pada table `biodata`
-$QUERY = &quot;SELECT * FROM biodata&quot;;
-$RESULT = mysql_query($QUERY);
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Halaman Home&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;h1&gt;Home&lt;/h1&gt;
+		&lt;h2&gt;Selamat Datang &lt;?php echo $user[&#39;name&#39;]; ?&gt;&lt;/h2&gt;
+		&lt;hr/&gt;
+		&lt;a href=&quot;biodata.php&quot;&gt;Biodata&lt;/a&gt;
+		&lt;hr/&gt;
+		&lt;a href=&quot;login.php?act=logout&quot;&gt;Logout&lt;/a&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
 								</pre>
+							</li>
+							<li>
+								<img src="imgs/create-menu.gif" class="img-thumbnail" />
+							</li>
+						</ul>
+				  </div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading" role="tab" id="accordion">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#step3" aria-expanded="true" aria-controls="Step3">
+						3. Form Add
+					</a>
+				  </h4>
+				</div>
+				<div id="step3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+				  <div class="panel-body">
+						<ul>
+							<li>
+								Buat file biodata.php, sesuai dengan arah link yang telah ditulis pada menu `&lt;a href=&quot;biodata.php&quot;&gt;Biodata&lt;/a&gt;`
 								<pre>
 &lt;?php 
-	//panggil koneksi
-	include &quot;koneksi.php&quot;;
-	//cek apakah ada action atau tidak
-	if(isset($_GET['act']) AND $_GET['act'])
+   //create form add
+   include &quot;add-biodata.html&quot;;
+?&gt;
+								</pre>
+							</li>
+							<li>
+								Klik menu `Biodata`, kemudian akan masuk ke halaman biodata
+							</li>
+							<li>
+								<img src="imgs/biodata-form-add.gif" class="img-thumbnail" />
+							</li>
+							<li>
+								Buat file add-biodata.html
+								<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Add Biodata&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;a href=&quot;biodata.php&quot;&gt;Kembali&lt;/a&gt;
+		&lt;h1&gt;Add Biodata&lt;/h1&gt;
+		&lt;hr/&gt;
+		&lt;form method=&quot;post&quot; action=&quot;biodata.php?act=create&quot;&gt;
+			&lt;table&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Nama&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;f_nama&quot;/&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Email&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;f_email&quot;/&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;No Telp&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;f_telp&quot;/&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Alamat&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;&lt;textarea name=&quot;f_alamat&quot;&gt;&lt;/textarea&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Jenis Kelamin&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;
+						&lt;label&gt;
+							&lt;input type=&quot;radio&quot; name=&quot;f_jk&quot; value=&quot;l&quot; /&gt;
+							Laki - Laki
+						&lt;/label&gt;
+						&lt;label&gt;
+							&lt;input type=&quot;radio&quot; name=&quot;f_jk&quot; value=&quot;p&quot; /&gt;
+							Perempuan
+						&lt;/label&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Agama&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;
+						&lt;select name=&quot;f_agama&quot;&gt;
+							&lt;option value=&quot;&quot;&gt;--Pilih Salah Satu--&lt;/option&gt;
+							&lt;option value=&quot;contoh1&quot;&gt;Contoh 1&lt;/option&gt;
+							&lt;option value=&quot;contoh2&quot;&gt;Contoh 2&lt;/option&gt;
+							&lt;option value=&quot;contoh3&quot;&gt;Contoh 3&lt;/option&gt;
+							&lt;option value=&quot;contoh4&quot;&gt;Contoh 4&lt;/option&gt;
+							&lt;option value=&quot;contoh5&quot;&gt;Contoh 5&lt;/option&gt;
+						&lt;/select&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Hobi&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;
+						&lt;label&gt;
+							&lt;input type=&quot;checkbox&quot; name=&quot;f_hobi[]&quot; value=&quot;membaca&quot; /&gt;
+							Membaca
+							&lt;input type=&quot;checkbox&quot; name=&quot;f_hobi[]&quot; value=&quot;menulis&quot; /&gt;
+							Menulis
+							&lt;input type=&quot;checkbox&quot; name=&quot;f_hobi[]&quot; value=&quot;main game&quot; /&gt;
+							Main Game
+							&lt;input type=&quot;checkbox&quot; name=&quot;f_hobi[]&quot; value=&quot;renang&quot; /&gt;
+							Renang
+							&lt;input type=&quot;checkbox&quot; name=&quot;f_hobi[]&quot; value=&quot;basket&quot; /&gt;
+							Basket
+						&lt;/label&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;Foto&lt;/td&gt;
+					&lt;td&gt;:&lt;/td&gt;
+					&lt;td&gt;&lt;input type=&quot;file&quot; name=&quot;f_foto&quot; /&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					&lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; name=&quot;f_submit&quot; /&gt;&lt;/td&gt;
+				&lt;/tr&gt;
+			&lt;/table&gt;
+		&lt;/form&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+								</pre>
+							</li>
+							<li>
+								Tambahkan atribut enctype pada form jika terdapat inpit type="file" pada form yang akan disubmit `&lt;form method=&quot;post&quot; action=&quot;biodata.php?act=create&quot; enctype=&quot;multipart/form-data&quot; &gt;` 
+							</li>
+							<li>
+								Cek fungsi form apakah dapat mengirimkan nilai pada halaman biodata.php
+								<pre>
+&lt;?php 
+	if(isset($_GET[&#39;act&#39;]))
 	{
-		if($_GET['act'] == &quot;add&quot;)
+		//debug hasil submit dari form
+		print_r($_POST);
+	}
+	else
+	{
+		//create form add
+		include &quot;add-biodata.html&quot;;
+	}
+	
+?&gt;
+								</pre>
+							</li>
+							<li>
+								Cek fungsi form apakah nilai form dikirim melalui form input, fungsinya untuk menjaga agar inputan harus melalui form input.
+								<pre>
+&lt;?php 
+	if(isset($_GET[&#39;act&#39;]))
+	{
+		if($_GET[&#39;act&#39;]==&quot;create&quot;)
 		{
-			//create form add
-			include &quot;add-biodata.html&quot;;
-		}
-		elseif($_GET['act'] == &quot;create&quot;)
-		{
-			//echo &quot;action create&quot;;
-			//cek apakah form dapat mengirimkan nilai pada biodata.php
-			//print_r($_POST);
-			//cek apakah nilai dikirimkan dari form atau tidak
-			if(isset($_POST['f_submit']) AND $_POST['f_submit']) //jika ya
+			//cek apakah data dikirimkan dari form atau tidak
+			if(isset($_POST[&#39;f_submit&#39;]) AND $_POST[&#39;f_submit&#39;])
 			{
-				//masukan nilai input pada form pada variable agar lebih ringkas
-				$nama = $_POST['f_nama'];
-				$email = $_POST['f_email'];
-				$telp = $_POST['f_telp'];
-				$alamat = $_POST['f_alamat'];
-				$jk = (isset($_POST['f_jk'])?$_POST['f_jk']:null);
-				$agama = $_POST['f_agama'];
-				$hobi = (isset($_POST['f_hobi'])?$_POST['f_hobi']:array());
-				
-				//cara simple
-				$hobi = implode(&quot;,&quot;, $hobi);
-				
-				//----------------------------------------------------
-				//cara dengan melakukan perulangan
-				//karena hobi adalah array jadi harus melakukan perulangan untuk mendapatkan nilai menjadi satu inputan
-				/*$hobinya = &quot;&quot;;
-				if(count($hobi) &gt; 0)
-				{
-					foreach($hobi as $v_hobi)
-					{
-						$hobinya .= $v_hobi .&quot;,&quot;; //menggabungkan nilai hobi menjadi satu baris kemudian dipisahkan anda `,`
-					}
-					$hobinya = substr($hobinya, 0, -1); //menghilangkan tanda `,` pada akhir string karena nilai terakhir berupa kosong
-					//echo $hobinya;
-				}*/
-				//-------------------------------------------------------
-				
-				//upload gambar
-				//cek apakah gambar diinputkan atau tidak
-				//jenis upload pengambilan nilai tidak sama dengan input di atas menggunakan $_POST tapi dengan variable $_FILES
-				if($_FILES['f_foto']['size'] &gt; 0) //cek size gambar untuk mengetahui eventnya
-				{
-					//Array ( [f_foto] =&gt; Array ( [name] =&gt; logo.png [type] =&gt; image/png [tmp_name] =&gt; D:\SOURCE\xampp\tmp\php3574.tmp [error] =&gt; 0 [size] =&gt; 1546 ) )
-					//semua hasil print dari gambar dapat dimanfaatkan untuk mengapload file ke folder yang kita inginkan
-					
-					//print_r($_FILES);
-					
-					$foto = $_FILES['f_foto']['name'];
-					//copy(temporary folder, folder tujuan beserta nama filenya);
-					//mengambil variable yang ada pada variable server `$_SERVER`
-					//print_r($_SERVER);
-					copy($_FILES['f_foto']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] .&quot;/webku/upload/&quot;. $foto); //perintah untuk menduplikat gambar yang ada pada temporary ke folder yang kita inginkan
-				}
-				else //jika tidak ada
-				{
-					//echo &quot;tidak ada gambar yang diinput.&quot;;
-					$foto = null;
-				}
-				//cek apakah nilai inputan telah dapat diambil atau tidak
-				/*
-				echo $nama .&quot;&lt;br/&gt;&quot;;
-				echo $email .&quot;&lt;br/&gt;&quot;;
-				echo $telp .&quot;&lt;br/&gt;&quot;;
-				echo $alamat .&quot;&lt;br/&gt;&quot;;
-				echo $hobinya .&quot;&lt;br/&gt;&quot;;
-				echo $hobi .&quot;&lt;br/&gt;&quot;;
-				echo $agama .&quot;&lt;br/&gt;&quot;;
-				echo $jk .&quot;&lt;br/&gt;&quot;;
-				echo $foto .&quot;&lt;br/&gt;&quot;;
-				*/
-				//semua nilai inputan telah dapat diambil
-				//validasi form agar kosong tidak dapat disimpan
-				if($nama AND $email AND $telp AND $alamat AND $hobi AND $agama AND $jk AND $foto)
-				{
-					//echo &quot;OK&quot;;
-					//buat perintah query untuk menyimpan hasil inputan dari form
-					$QUERY = &quot;INSERT INTO biodata (nama, alamat, no_telp, email, jenis_kelamin, hobi, agama, foto) VALUES ('$nama', '$alamat', '$telp', '$email', '$jk', '$hobi', '$agama', '$foto')&quot;;
-					//cek apakah perintah query telah berjalan dengan benar atau belum
-					//echo $QUERY;
-					//jika pada phpmyadmin telah berhasil, jalan kan untuk eksekusi ke database saat form disubmit
-					//perintah eksekusi query pada mysql
-					mysql_query($QUERY);
-					//panggil koneksi ke database agar perintah dapat dijalankan
-					header(&quot;location:biodata.php&quot;); //arahkan halaman ke halaman view list - pada belajar selanjutnya ..
-				}
-				else
-				{
-					echo &quot;Form harus diisi!&quot;;
-				}
+				//debug hasil submit dari form
+				print_r($_POST);
 			}
-			else //jika tidak
+			else
 			{
-				header(&quot;location:biodata.php?act=add&quot;); //arahkan halaman ke halaman add
+				header(&quot;location:biodata.php&quot;);
 			}
-		}
-		elseif($_GET['act'] == &quot;edit&quot;)
-		{
-			//tampilkan halaman form edit
-			//jika ingin mengedit data, data yang akan diedit harus sesuai dengan data yang dipilih dengan field kunci yaitu id
-			//select data yang akan diedit, buatkan perintah query untk memilih data yang akan diedit
-			$id = $_GET['id'];
-			if($id)
-			{
-				$QUERY = &quot;SELECT * FROM biodata WHERE id='&quot;. $id .&quot;'&quot;;
-				//cek fungsi query apakah sudah benar atau belum
-				//echo $QUERY;
-				//exit;
-				//ambil hasil dari perintah query kemudian ditampilkan pada masing-masing input pada form
-				$RESULT = mysql_query($QUERY);
-				$ROW = mysql_fetch_assoc($RESULT);
-				
-				//cek apakah data telah dapat ditampilkan
-				//print_r($ROW); //tampilan data yang berupa kumpulan array
-				
-			}
-			
-			include &quot;edit-biodata.html&quot;;
 		}
 	}
 	else
 	{
-		//view list biodata
-		//buat perintah query untuk menampilkan data pada table `biodata`
-		$QUERY = &quot;SELECT * FROM biodata&quot;;
-		$RESULT = mysql_query($QUERY);
-		include &quot;list-biodata.html&quot;;
+		//create form add
+		include &quot;add-biodata.html&quot;;
 	}
-?&gt;gt;
+	
+?&gt;
 								</pre>
 							</li>
+						</ul>
+				  </div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading" role="tab" id="accordion">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#step4" aria-expanded="true" aria-controls="Step4">
+						4. Save Data
+					</a>
+				  </h4>
+				</div>
+				<div id="step4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+				  <div class="panel-body">
+						<ul>
 							<li>
-								Tambakan tampilan table untuk menampilkan hasil query
-								<pre>	
-&lt;table border=&quot;1&quot; width=&quot;100%&quot; cellpadding=&quot;5&quot;&gt;
-	&lt;tr&gt;
-		&lt;td&gt;Nama&lt;/td&gt;
-		&lt;td&gt;Email&lt;/td&gt;
-		&lt;td&gt;No Telp&lt;/td&gt;
-		&lt;td&gt;Hobi&lt;/td&gt;
-		&lt;td&gt;Edit&lt;/td&gt;
-	&lt;/tr&gt;
-	&lt;?php while($row=mysql_fetch_assoc($RESULT)){ ?&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&lt;?php echo $row['nama']; ?&gt;&lt;/td&gt;
-			&lt;td&gt;&lt;?php echo $row['email']; ?&gt;&lt;/td&gt;
-			&lt;td&gt;&lt;?php echo $row['no_telp']; ?&gt;&lt;/td&gt;
-			&lt;td&gt;&lt;?php echo $row['hobi']; ?&gt;&lt;/td&gt;
-			&lt;!-- kirim id sebagai kunci untuk setiap data agar menapilkan detail dari data --&gt;
-			&lt;td&gt;&lt;a href=&quot;biodata.php?act=edit&amp;id=&lt;?php echo $row['id']; ?&gt;&quot;&gt;Edit&lt;/a&gt;&lt;/td&gt;
-		&lt;/tr&gt;
-	&lt;?php } ?&gt;
-&lt;/table&gt;gt;
-								</pre>
+								Buat variable untuk masing-masing input yang ada pada form
 								<pre>
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-	&lt;head&gt;
-		&lt;title&gt;List Biodata&lt;/title&gt;
-	&lt;/head&gt;
-	&lt;body&gt;
-		&lt;h1&gt;List Biodata&lt;/h1&gt;
-		&lt;hr/&gt;
-		&lt;table border=&quot;1&quot; width=&quot;100%&quot; cellpadding=&quot;5&quot;&gt;
-			&lt;tr&gt;
-				&lt;td&gt;Nama&lt;/td&gt;
-				&lt;td&gt;Email&lt;/td&gt;
-				&lt;td&gt;No Telp&lt;/td&gt;
-				&lt;td&gt;Hobi&lt;/td&gt;
-				&lt;td&gt;Edit&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;?php while($row=mysql_fetch_assoc($RESULT)){ ?&gt;
-				&lt;tr&gt;
-					&lt;td&gt;&lt;?php echo $row['nama']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['email']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['no_telp']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['hobi']; ?&gt;&lt;/td&gt;
-					&lt;!-- kirim id sebagai kunci untuk setiap data agar menapilkan detail dari data --&gt;
-					&lt;td&gt;&lt;a href=&quot;biodata.php?act=edit&amp;id=&lt;?php echo $row['id']; ?&gt;&quot;&gt;Edit&lt;/a&gt;&lt;/td&gt;
-				&lt;/tr&gt;
-			&lt;?php } ?&gt;
-		&lt;/table&gt;gt;
-	&lt;/body&gt;
-&lt;/html&gt;gt;
+&lt;?php 
+	if(isset($_GET[&#39;act&#39;]))
+	{
+		if($_GET[&#39;act&#39;]==&quot;create&quot;)
+		{
+			//cek apakah data dikirimkan dari form atau tidak
+			if(isset($_POST[&#39;f_submit&#39;]) AND $_POST[&#39;f_submit&#39;])
+			{
+				//debug hasil submit dari form
+				//print_r($_POST);
+				$nama = $_POST[&#39;f_nama&#39;];
+				$email = $_POST[&#39;f_email&#39;];
+				$telp = $_POST[&#39;f_telp&#39;];
+				$alamat = $_POST[&#39;f_alamat&#39;];
+				$jk = $_POST[&#39;f_jk&#39;];
+				$agama = $_POST[&#39;f_agama&#39;];
+				//looping array hobi
+				$hobi = $_POST[&#39;f_hobi&#39;];
+				$hobinya = &quot;&quot;;
+				if(count($hobi) &gt; 0)
+				{
+					foreach($hobi as $v_hobi)
+					{
+						$hobinya .= $v_hobi .&quot;,&quot;;
+					}
+					$hobinya = substr($hobinya, 0, -1);
+				}
+				//upload foto
+				if($_FILES[&#39;f_foto&#39;][&#39;size&#39;] &gt; 0) //cek apakah ada file yang akan diupload atau tidak
+				{
+					//jika ada
+					
+					$foto = $_FILES[&#39;f_foto&#39;][&#39;name&#39;]; //mengambil nama gambar yang akan diupload
+					@copy($_FILES[&#39;f_foto&#39;][&#39;tmp_name&#39;], $_SERVER[&#39;DOCUMENT_ROOT&#39;] .&quot;/webku/upload/&quot;. $foto); //memindahkan file yang telah diupload pada folder yang diinginkan, secara default file akan diulad ada temporary
+				}
+				else
+				{
+					//jika tidak ada
+					$foto = null;
+				}
+				//cek hasil eksekusi dengan perintah echo semua variable
+				
+			}
+			else
+			{
+				header(&quot;location:biodata.php&quot;);
+			}
+		}
+	}
+	else
+	{
+		//create form add
+		include &quot;add-biodata.html&quot;;
+	}
+	
+?&gt;
 								</pre>
 							</li>
-							<li>
-								Tambahkan link untuk mengarahkan ke halaman `add`
+							<li>Buat folder untuk menyimpan gambar pada project dengan nama `upload`</li>
+							<li>Cek hasil eksekusi dari form dengan memberikan perintah php echo untuk menampilkan hasil yang telah diinput pada form
 								<pre>
-&lt;a href=&quot;biodata.php?act=add&quot;&gt;Add&lt;/a&gt;gt;
+echo $nama .&quot; - &quot;. $email .&quot; - &quot;. $telp .&quot; - &quot;. $alamat .&quot; - &quot;. $jk .&quot; - &quot;. $agama .&quot; - &quot;. $hobinya .&quot; - &quot;. $foto;
 								</pre>
 								<pre>
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-	&lt;head&gt;
-		&lt;title&gt;List Biodata&lt;/title&gt;
-	&lt;/head&gt;
-	&lt;body&gt;
-		&lt;h1&gt;List Biodata&lt;/h1&gt;
-		&lt;hr/&gt;
-		&lt;a href=&quot;biodata.php?act=add&quot;&gt;Add&lt;/a&gt;gt;
-		&lt;table border=&quot;1&quot; width=&quot;100%&quot; cellpadding=&quot;5&quot;&gt;
-			&lt;tr&gt;
-				&lt;td&gt;Nama&lt;/td&gt;
-				&lt;td&gt;Email&lt;/td&gt;
-				&lt;td&gt;No Telp&lt;/td&gt;
-				&lt;td&gt;Hobi&lt;/td&gt;
-				&lt;td&gt;Edit&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;?php while($row=mysql_fetch_assoc($RESULT)){ ?&gt;
-				&lt;tr&gt;
-					&lt;td&gt;&lt;?php echo $row['nama']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['email']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['no_telp']; ?&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;?php echo $row['hobi']; ?&gt;&lt;/td&gt;
-					&lt;!-- kirim id sebagai kunci untuk setiap data agar menapilkan detail dari data --&gt;
-					&lt;td&gt;&lt;a href=&quot;biodata.php?act=edit&amp;id=&lt;?php echo $row['id']; ?&gt;&quot;&gt;Edit&lt;/a&gt;&lt;/td&gt;
-				&lt;/tr&gt;
-			&lt;?php } ?&gt;
-		&lt;/table&gt;gt;
-	&lt;/body&gt;
-&lt;/html&gt;gt;
+&lt;?php 
+	if(isset($_GET[&#39;act&#39;]))
+	{
+		if($_GET[&#39;act&#39;]==&quot;create&quot;)
+		{
+			//cek apakah data dikirimkan dari form atau tidak
+			if(isset($_POST[&#39;f_submit&#39;]) AND $_POST[&#39;f_submit&#39;])
+			{
+				//debug hasil submit dari form
+				//print_r($_POST);
+				$nama = $_POST[&#39;f_nama&#39;];
+				$email = $_POST[&#39;f_email&#39;];
+				$telp = $_POST[&#39;f_telp&#39;];
+				$alamat = $_POST[&#39;f_alamat&#39;];
+				$jk = $_POST[&#39;f_jk&#39;];
+				$agama = $_POST[&#39;f_agama&#39;];
+				//looping array hobi
+				$hobi = $_POST[&#39;f_hobi&#39;];
+				$hobinya = &quot;&quot;;
+				if(count($hobi) &gt; 0)
+				{
+					foreach($hobi as $v_hobi)
+					{
+						$hobinya .= $v_hobi .&quot;,&quot;;
+					}
+					$hobinya = substr($hobinya, 0, -1);
+				}
+				//upload foto
+				if($_FILES[&#39;f_foto&#39;][&#39;size&#39;] &gt; 0) //cek apakah ada file yang akan diupload atau tidak
+				{
+					//jika ada
+					
+					$foto = $_FILES[&#39;f_foto&#39;][&#39;name&#39;]; //mengambil nama gambar yang akan diupload
+					@copy($_FILES[&#39;f_foto&#39;][&#39;tmp_name&#39;], $_SERVER[&#39;DOCUMENT_ROOT&#39;] .&quot;/webku/upload/&quot;. $foto); //memindahkan file yang telah diupload pada folder yang diinginkan, secara default file akan diulad ada temporary
+				}
+				else
+				{
+					//jika tidak ada
+					$foto = null;
+				}
+				//cek hasil eksekusi dengan perintah echo semua variable
+				//echo $nama .&quot; - &quot;. $email .&quot; - &quot;. $telp .&quot; - &quot;. $alamat .&quot; - &quot;. $jk .&quot; - &quot;. $agama .&quot; - &quot;. $hobinya .&quot; - &quot;. $foto;
+				//buat perintah query
+				
+				
+			}
+			else
+			{
+				header(&quot;location:biodata.php&quot;);
+			}
+		}
+	}
+	else
+	{
+		//create form add
+		include &quot;add-biodata.html&quot;;
+	}
+	
+?&gt;
 								</pre>
 							</li>
+							<li>Jika semua hasil dapat ditampilkan maka form telah berhasil mengirimkan semua hasil inputan, jika belum maka cek satu persatu input form apakah nama inputan telah sama dengan nama yang telah dimasukan ke variable. &lt;input type=&quot;text&quot; name=&quot;f_nama&quot;/&gt; => $nama = $_POST[&#39;f_nama&#39;];, jika berhasil matikan perintah dengan tanda `//`</li>
+							<li>Buat query untuk menyimpan hasil inputan yang telah dimasukan ke dalam variable masing-masing.
+								<pre>
+$SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,agama,foto) VALUES (&#39;$nama&#39;, &#39;$email&#39;, &#39;$telp&#39;, &#39;$alamat&#39;, &#39;$jk&#39;, &#39;$hobinya&#39;, &#39;$agama&#39;, &#39;$foto&#39;)&quot;; 
+								</pre>
+								<pre>
+&lt;?php 
+	if(isset($_GET[&#39;act&#39;]))
+	{
+		if($_GET[&#39;act&#39;]==&quot;create&quot;)
+		{
+			//cek apakah data dikirimkan dari form atau tidak
+			if(isset($_POST[&#39;f_submit&#39;]) AND $_POST[&#39;f_submit&#39;])
+			{
+				//debug hasil submit dari form
+				//print_r($_POST);
+				$nama = $_POST[&#39;f_nama&#39;];
+				$email = $_POST[&#39;f_email&#39;];
+				$telp = $_POST[&#39;f_telp&#39;];
+				$alamat = $_POST[&#39;f_alamat&#39;];
+				$jk = $_POST[&#39;f_jk&#39;];
+				$agama = $_POST[&#39;f_agama&#39;];
+				//looping array hobi
+				$hobi = $_POST[&#39;f_hobi&#39;];
+				$hobinya = &quot;&quot;;
+				if(count($hobi) &gt; 0)
+				{
+					foreach($hobi as $v_hobi)
+					{
+						$hobinya .= $v_hobi .&quot;,&quot;;
+					}
+					$hobinya = substr($hobinya, 0, -1);
+				}
+				//upload foto
+				if($_FILES[&#39;f_foto&#39;][&#39;size&#39;] &gt; 0) //cek apakah ada file yang akan diupload atau tidak
+				{
+					//jika ada
+					
+					$foto = $_FILES[&#39;f_foto&#39;][&#39;name&#39;]; //mengambil nama gambar yang akan diupload
+					@copy($_FILES[&#39;f_foto&#39;][&#39;tmp_name&#39;], $_SERVER[&#39;DOCUMENT_ROOT&#39;] .&quot;/webku/upload/&quot;. $foto); //memindahkan file yang telah diupload pada folder yang diinginkan, secara default file akan diulad ada temporary
+				}
+				else
+				{
+					//jika tidak ada
+					$foto = null;
+				}
+				//cek hasil eksekusi dengan perintah echo semua variable
+				//echo $nama .&quot; - &quot;. $email .&quot; - &quot;. $telp .&quot; - &quot;. $alamat .&quot; - &quot;. $jk .&quot; - &quot;. $agama .&quot; - &quot;. $hobinya .&quot; - &quot;. $foto;
+				//buat perintah query
+				$SQL = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,agama,foto) VALUES (&#39;$nama&#39;, &#39;$email&#39;, &#39;$telp&#39;, &#39;$alamat&#39;, &#39;$jk&#39;, &#39;$hobinya&#39;, &#39;$agama&#39;, &#39;$foto&#39;)&quot;; 
+				
+				echo $SQL;
+				
+			}
+			else
+			{
+				header(&quot;location:biodata.php&quot;);
+			}
+		}
+	}
+	else
+	{
+		//create form add
+		include &quot;add-biodata.html&quot;;
+	}
+	
+?&gt;
+								</pre>
+							</li>
+							<li>Tampilkan perintah query dengan fungsi echo untuk memastikan apakah perintah sudah benar atau belum</li>
+							<li>Perbaruhi halaman project atau refresh halaman</li>
+							<li>Buka tab baru kemudian jalankan phpmyadmin http://localhost/phpmyadmin, pilih database yang telah dibuat</li>
+							<li>Copykan hasil echo perintah query pada panel sql yang ada pada , untuk encoba fungsi dari query yang telah dibuat</li>
+							<li><img src="imgs/phpmyadmin-sql.gif" class="img-thumbnail" /></li>
+							<li>Jika perintah query benar maka tidak perlu lagi untuk menampilkan query dengan echo karena perintah akan secara langsung tereksekusi saat form disubmit.</li>
+							<li>Panggil file koneksi.php agar eksekusi ke database dapat dijalankan
+								<pre>include &quot;koneksi.php&quot;;</pre>
+								<pre>
+&lt;?php 
+	include &quot;koneksi.php&quot;;
+	if(isset($_GET[&#39;act&#39;]))
+	{
+		if($_GET[&#39;act&#39;]==&quot;create&quot;)
+		{
+			//cek apakah data dikirimkan dari form atau tidak
+			if(isset($_POST[&#39;f_submit&#39;]) AND $_POST[&#39;f_submit&#39;])
+			{
+				//debug hasil submit dari form
+				//print_r($_POST);
+				$nama = $_POST[&#39;f_nama&#39;];
+				$email = $_POST[&#39;f_email&#39;];
+				$telp = $_POST[&#39;f_telp&#39;];
+				$alamat = $_POST[&#39;f_alamat&#39;];
+				$jk = $_POST[&#39;f_jk&#39;];
+				$agama = $_POST[&#39;f_agama&#39;];
+				//looping array hobi
+				$hobi = $_POST[&#39;f_hobi&#39;];
+				$hobinya = &quot;&quot;;
+				if(count($hobi) &gt; 0)
+				{
+					foreach($hobi as $v_hobi)
+					{
+						$hobinya .= $v_hobi .&quot;,&quot;;
+					}
+					$hobinya = substr($hobinya, 0, -1);
+				}
+				//upload foto
+				if($_FILES[&#39;f_foto&#39;][&#39;size&#39;] &gt; 0) //cek apakah ada file yang akan diupload atau tidak
+				{
+					//jika ada
+					
+					$foto = $_FILES[&#39;f_foto&#39;][&#39;name&#39;]; //mengambil nama gambar yang akan diupload
+					@copy($_FILES[&#39;f_foto&#39;][&#39;tmp_name&#39;], $_SERVER[&#39;DOCUMENT_ROOT&#39;] .&quot;/webku/upload/&quot;. $foto); //memindahkan file yang telah diupload pada folder yang diinginkan, secara default file akan diulad ada temporary
+				}
+				else
+				{
+					//jika tidak ada
+					$foto = null;
+				}
+				//cek hasil eksekusi dengan perintah echo semua variable
+				//echo $nama .&quot; - &quot;. $email .&quot; - &quot;. $telp .&quot; - &quot;. $alamat .&quot; - &quot;. $jk .&quot; - &quot;. $agama .&quot; - &quot;. $hobinya .&quot; - &quot;. $foto;
+				//buat perintah query
+				$QUERY = &quot;INSERT INTO biodata (nama,email,no_telp,alamat,jenis_kelamin,hobi,agama,foto) VALUES (&#39;$nama&#39;, &#39;$email&#39;, &#39;$telp&#39;, &#39;$alamat&#39;, &#39;$jk&#39;, &#39;$hobinya&#39;, &#39;$agama&#39;, &#39;$foto&#39;)&quot;; 
+				
+				mysql_query($QUERY);
+				
+				header(&quot;location:biodata.php&quot;);
+			}
+			else
+			{
+				header(&quot;location:biodata.php&quot;);
+			}
+		}
+	}
+	else
+	{
+		//create form add
+		include &quot;add-biodata.html&quot;;
+	}
+	
+?&gt;
+								</pre>
+							</li>
+							<li>Tambahkan perintah `mysql_query()` untuk menjalankan hasil query sehingga perintah dapat dijalankan dan akan tersimpan pada database - table biodata</li>
+							<li>Selanjutkan tampilkan hasil simpan pada layout table <a href="http://dwilanang.github.io/code-create-data-view-list">Code Create Data - View List Data</a></li>
 						</ul>
 				  </div>
 				</div>
